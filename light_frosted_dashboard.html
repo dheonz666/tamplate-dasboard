@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light Frosted Glass Dashboard</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6', // Teal
+                            600: '#0d9488',
+                            900: '#134e4a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        body {
+            /* Light, serene abstract/nature wallpaper */
+            background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2553&auto=format&fit=crop'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #1f2937; /* Gray 800 */
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Subtle light overlay to ensure readability */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.4) 100%);
+            z-index: -1;
+        }
+
+        /* Frosted Glass Class */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 10px 30px 0 rgba(31, 38, 135, 0.1);
+            border-radius: 1.5rem;
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            color: #374151;
+        }
+        
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.7);
+            outline: none;
+            border-color: #14b8a6;
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+        }
+
+        /* Custom Scrollbar for light theme */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.3); }
+        
+        .active-nav {
+            background: rgba(255, 255, 255, 0.6);
+            color: #0d9488;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased flex h-screen p-3 sm:p-4 md:p-6 gap-4 md:gap-6">
+
+    <!-- Floating Sidebar -->
+    <aside class="glass-panel w-20 md:w-64 h-full flex flex-col justify-between py-6 px-3 transition-all duration-300 z-20 shrink-0">
+        <div>
+            <!-- Logo -->
+            <div class="flex items-center justify-center md:justify-start gap-3 px-2 mb-10">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-500 to-teal-300 flex items-center justify-center shadow-lg shadow-teal-500/30 shrink-0 text-white">
+                    <i class="ph ph-leaf text-2xl"></i>
+                </div>
+                <span class="font-bold text-xl tracking-wide hidden md:block text-gray-800">Lumina</span>
+            </div>
+
+            <!-- Nav Links -->
+            <nav class="flex flex-col gap-2">
+                <a href="#" class="active-nav flex items-center gap-4 px-3 md:px-4 py-3 rounded-xl transition-all hover:bg-white/50 group">
+                    <i class="ph ph-squares-four text-2xl md:text-xl group-hover:scale-110 transition-transform"></i>
+                    <span class="hidden md:block">Dashboard</span>
+                </a>
+                <a href="#" class="flex items-center gap-4 px-3 md:px-4 py-3 rounded-xl text-gray-600 transition-all hover:bg-white/50 group">
+                    <i class="ph ph-chart-line-up text-2xl md:text-xl group-hover:scale-110 transition-transform"></i>
+                    <span class="hidden md:block">Analytics</span>
+                </a>
+                <a href="#" class="flex items-center gap-4 px-3 md:px-4 py-3 rounded-xl text-gray-600 transition-all hover:bg-white/50 group">
+                    <i class="ph ph-users text-2xl md:text-xl group-hover:scale-110 transition-transform"></i>
+                    <span class="hidden md:block">Customers</span>
+                </a>
+                <a href="#" class="flex items-center gap-4 px-3 md:px-4 py-3 rounded-xl text-gray-600 transition-all hover:bg-white/50 group">
+                    <i class="ph ph-shopping-cart text-2xl md:text-xl group-hover:scale-110 transition-transform"></i>
+                    <span class="hidden md:block">Orders</span>
+                </a>
+                <a href="#" class="flex items-center gap-4 px-3 md:px-4 py-3 rounded-xl text-gray-600 transition-all hover:bg-white/50 group">
+                    <i class="ph ph-wallet text-2xl md:text-xl group-hover:scale-110 transition-transform"></i>
+                    <span class="hidden md:block">Wallet</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Bottom Sidebar -->
+        <div class="flex flex-col gap-2">
+            <a href="#" class="flex items-center gap-4 px-3 md:px-4 py-3 rounded-xl text-gray-600 transition-all hover:bg-white/50 group">
+                <i class="ph ph-gear text-2xl md:text-xl group-hover:rotate-90 transition-transform duration-300"></i>
+                <span class="hidden md:block">Settings</span>
+            </a>
+            <div class="mt-4 px-2 hidden md:block">
+                <div class="glass-panel p-4 bg-white/30 !border-white/40 flex items-center gap-3">
+                    <img src="https://i.pravatar.cc/150?img=47" alt="User" class="w-10 h-10 rounded-full border-2 border-white shadow-sm">
+                    <div>
+                        <p class="text-sm font-semibold">Sarah Jenkins</p>
+                        <p class="text-xs text-gray-500">Pro Plan</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden">
+        
+        <!-- Header -->
+        <header class="glass-panel mb-4 md:mb-6 px-6 py-4 flex items-center justify-between shrink-0">
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">Overview</h1>
+                <p class="text-xs md:text-sm text-gray-600">Here's what's happening with your store today.</p>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <!-- Search -->
+                <div class="relative hidden sm:block">
+                    <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="text" placeholder="Search anything..." class="glass-input rounded-full py-2 pl-10 pr-4 text-sm w-48 lg:w-64 transition-all placeholder-gray-500">
+                </div>
+                <!-- Notifications -->
+                <button class="w-10 h-10 rounded-full glass-input flex items-center justify-center hover:bg-white/80 transition-colors relative text-gray-600">
+                    <i class="ph ph-bell text-lg"></i>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+                </button>
+                <!-- Mobile Profile (visible only on small screens) -->
+                <img src="https://i.pravatar.cc/150?img=47" alt="User" class="w-10 h-10 rounded-full border-2 border-white shadow-sm md:hidden block">
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto pr-2 pb-10 space-y-4 md:space-y-6 scroll-smooth">
+            
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                
+                <!-- Card 1 -->
+                <div class="glass-panel p-5 flex items-center gap-4 hover:-translate-y-1 transition-transform duration-300">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl shrink-0 shadow-inner">
+                        <i class="ph ph-currency-dollar"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Total Revenue</p>
+                        <h3 class="text-xl font-bold text-gray-800">$54,230</h3>
+                        <p class="text-xs text-green-600 flex items-center font-medium mt-0.5">
+                            <i class="ph ph-arrow-up-right mr-1"></i> +12.5%
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-panel p-5 flex items-center gap-4 hover:-translate-y-1 transition-transform duration-300">
+                    <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 text-2xl shrink-0 shadow-inner">
+                        <i class="ph ph-users-three"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">New Visitors</p>
+                        <h3 class="text-xl font-bold text-gray-800">2,405</h3>
+                        <p class="text-xs text-green-600 flex items-center font-medium mt-0.5">
+                            <i class="ph ph-arrow-up-right mr-1"></i> +4.2%
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-panel p-5 flex items-center gap-4 hover:-translate-y-1 transition-transform duration-300">
+                    <div class="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center text-brand-600 text-2xl shrink-0 shadow-inner">
+                        <i class="ph ph-shopping-bag"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Total Sales</p>
+                        <h3 class="text-xl font-bold text-gray-800">1,214</h3>
+                        <p class="text-xs text-red-500 flex items-center font-medium mt-0.5">
+                            <i class="ph ph-arrow-down-right mr-1"></i> -1.5%
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="glass-panel p-5 flex items-center gap-4 hover:-translate-y-1 transition-transform duration-300">
+                    <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 text-2xl shrink-0 shadow-inner">
+                        <i class="ph ph-chart-bar"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Conversion Rate</p>
+                        <h3 class="text-xl font-bold text-gray-800">3.8%</h3>
+                        <p class="text-xs text-green-600 flex items-center font-medium mt-0.5">
+                            <i class="ph ph-arrow-up-right mr-1"></i> +0.8%
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                <!-- Bar Chart -->
+                <div class="glass-panel p-6 lg:col-span-2">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-lg font-bold text-gray-800">Revenue Analytics</h2>
+                        <select class="glass-input text-xs py-1.5 px-3 rounded-lg cursor-pointer">
+                            <option>This Year</option>
+                            <option>Last Year</option>
+                        </select>
+                    </div>
+                    <div class="w-full h-[250px]">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Doughnut Chart -->
+                <div class="glass-panel p-6">
+                    <h2 class="text-lg font-bold text-gray-800 mb-2">Traffic Source</h2>
+                    <p class="text-xs text-gray-500 mb-6">Where your users are coming from.</p>
+                    <div class="w-full h-[200px] flex justify-center">
+                        <canvas id="sourceChart"></canvas>
+                    </div>
+                    <div class="mt-6 space-y-3">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="flex items-center gap-2 text-gray-600"><div class="w-3 h-3 rounded-full bg-brand-500"></div> Organic Search</span>
+                            <span class="font-semibold text-gray-800">45%</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="flex items-center gap-2 text-gray-600"><div class="w-3 h-3 rounded-full bg-blue-400"></div> Direct</span>
+                            <span class="font-semibold text-gray-800">30%</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="flex items-center gap-2 text-gray-600"><div class="w-3 h-3 rounded-full bg-purple-400"></div> Social Media</span>
+                            <span class="font-semibold text-gray-800">25%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Orders Table -->
+            <div class="glass-panel p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-lg font-bold text-gray-800">Recent Orders</h2>
+                    <button class="text-brand-600 text-sm font-medium hover:underline">View All</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-gray-500 text-xs uppercase tracking-wider border-b border-white/50">
+                                <th class="pb-3 font-semibold">Order ID</th>
+                                <th class="pb-3 font-semibold">Customer</th>
+                                <th class="pb-3 font-semibold">Date</th>
+                                <th class="pb-3 font-semibold">Amount</th>
+                                <th class="pb-3 font-semibold">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b border-white/30 hover:bg-white/20 transition-colors">
+                                <td class="py-4 font-medium text-gray-800">#ORD-001</td>
+                                <td class="py-4 flex items-center gap-3">
+                                    <img src="https://i.pravatar.cc/150?img=11" class="w-8 h-8 rounded-full" alt="avatar">
+                                    <span class="text-gray-700">John Doe</span>
+                                </td>
+                                <td class="py-4 text-gray-600">Oct 24, 2023</td>
+                                <td class="py-4 font-semibold text-gray-800">$120.00</td>
+                                <td class="py-4">
+                                    <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200">Completed</span>
+                                </td>
+                            </tr>
+                            <tr class="border-b border-white/30 hover:bg-white/20 transition-colors">
+                                <td class="py-4 font-medium text-gray-800">#ORD-002</td>
+                                <td class="py-4 flex items-center gap-3">
+                                    <img src="https://i.pravatar.cc/150?img=5" class="w-8 h-8 rounded-full" alt="avatar">
+                                    <span class="text-gray-700">Alice Smith</span>
+                                </td>
+                                <td class="py-4 text-gray-600">Oct 23, 2023</td>
+                                <td class="py-4 font-semibold text-gray-800">$340.50</td>
+                                <td class="py-4">
+                                    <span class="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 border border-yellow-200">Pending</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-white/20 transition-colors">
+                                <td class="py-4 font-medium text-gray-800">#ORD-003</td>
+                                <td class="py-4 flex items-center gap-3">
+                                    <img src="https://i.pravatar.cc/150?img=12" class="w-8 h-8 rounded-full" alt="avatar">
+                                    <span class="text-gray-700">Robert Johnson</span>
+                                </td>
+                                <td class="py-4 text-gray-600">Oct 22, 2023</td>
+                                <td class="py-4 font-semibold text-gray-800">$85.00</td>
+                                <td class="py-4">
+                                    <span class="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700 border border-red-200">Cancelled</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Set light theme defaults for charts
+        Chart.defaults.color = '#6b7280'; // Gray-500
+        Chart.defaults.font.family = 'Poppins, sans-serif';
+        Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+        Chart.defaults.plugins.tooltip.titleColor = '#1f2937';
+        Chart.defaults.plugins.tooltip.bodyColor = '#4b5563';
+        Chart.defaults.plugins.tooltip.borderColor = 'rgba(0,0,0,0.1)';
+        Chart.defaults.plugins.tooltip.borderWidth = 1;
+        Chart.defaults.plugins.tooltip.padding = 10;
+        Chart.defaults.plugins.tooltip.cornerRadius = 8;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- REVENUE BAR CHART ---
+            const ctxRev = document.getElementById('revenueChart').getContext('2d');
+            
+            new Chart(ctxRev, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    datasets: [{
+                        label: 'Revenue ($)',
+                        data: [12000, 19000, 15000, 22000, 18000, 28000, 24000, 32000],
+                        backgroundColor: 'rgba(20, 184, 166, 0.8)', // Teal
+                        borderRadius: 6,
+                        barThickness: 20,
+                        hoverBackgroundColor: 'rgba(13, 148, 136, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.5)',
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                callback: function(value) { return '$' + value / 1000 + 'k'; }
+                            }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // --- SOURCE DOUGHNUT CHART ---
+            const ctxSource = document.getElementById('sourceChart').getContext('2d');
+            
+            new Chart(ctxSource, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Organic', 'Direct', 'Social'],
+                    datasets: [{
+                        data: [45, 30, 25],
+                        backgroundColor: [
+                            '#14b8a6', // Teal
+                            '#60a5fa', // Blue
+                            '#c084fc'  // Purple
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
