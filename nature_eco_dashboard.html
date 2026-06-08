@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nature Eco Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Nunito', 'sans-serif'] },
+                    colors: { leaf: { 400: '#34d399', 500: '#10b981', 900: '#064e3b' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-image: url('https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=2560&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #f8fafc;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 1.5rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 flex flex-col gap-6">
+    <header class="glass-panel p-4 flex justify-between items-center w-full max-w-7xl mx-auto">
+        <div class="flex items-center gap-3">
+            <div class="p-2 bg-leaf-500/20 rounded-full border border-leaf-500/50">
+                <i class="ph ph-leaf text-2xl text-leaf-400"></i>
+            </div>
+            <h1 class="text-xl font-bold tracking-wide">Eco<span class="text-leaf-400">Sphere</span></h1>
+        </div>
+        <nav class="hidden md:flex gap-6">
+            <a href="#" class="text-white hover:text-leaf-400 transition">Dashboard</a>
+            <a href="#" class="text-white/70 hover:text-leaf-400 transition">Emissions</a>
+            <a href="#" class="text-white/70 hover:text-leaf-400 transition">Reports</a>
+        </nav>
+        <img src="https://i.pravatar.cc/150?img=47" class="w-10 h-10 rounded-full border-2 border-leaf-400">
+    </header>
+
+    <main class="flex-1 w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Stats Cards -->
+        <div class="glass-panel p-6 flex flex-col justify-center">
+            <p class="text-white/60 text-sm mb-1">Carbon Offset</p>
+            <h2 class="text-4xl font-bold text-leaf-400">2,450 <span class="text-lg text-white/80">tons</span></h2>
+            <p class="text-sm text-leaf-400 mt-2 flex items-center gap-1"><i class="ph ph-trend-up"></i> +12% this month</p>
+        </div>
+        <div class="glass-panel p-6 flex flex-col justify-center">
+            <p class="text-white/60 text-sm mb-1">Trees Planted</p>
+            <h2 class="text-4xl font-bold text-white">18,205</h2>
+            <p class="text-sm text-leaf-400 mt-2 flex items-center gap-1"><i class="ph ph-trend-up"></i> +400 this week</p>
+        </div>
+        <div class="glass-panel p-6 flex flex-col justify-center">
+            <p class="text-white/60 text-sm mb-1">Air Quality Index</p>
+            <h2 class="text-4xl font-bold text-blue-300">42 <span class="text-lg text-white/80">/ Good</span></h2>
+            <div class="w-full bg-white/10 h-1 mt-3 rounded-full">
+                <div class="bg-blue-400 w-[42%] h-full rounded-full"></div>
+            </div>
+        </div>
+
+        <div class="md:col-span-3 glass-panel p-6">
+            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2"><i class="ph ph-chart-line-up"></i> CO2 Reduction Progress</h3>
+            <div class="w-full h-[300px]">
+                <canvas id="natureChart"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const ctx = document.getElementById('natureChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Target',
+                    data: [100, 90, 80, 70, 60, 50],
+                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                    borderDash: [5, 5],
+                    fill: false
+                }, {
+                    label: 'Actual Emissions',
+                    data: [98, 85, 75, 68, 55, 45],
+                    borderColor: '#34d399',
+                    backgroundColor: 'rgba(52, 211, 153, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                color: '#fff',
+                scales: {
+                    x: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: 'rgba(255,255,255,0.7)' } },
+                    y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: 'rgba(255,255,255,0.7)' } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

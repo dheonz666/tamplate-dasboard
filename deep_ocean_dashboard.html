@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Ocean Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body {
+            background-image: url('https://images.unsplash.com/photo-1551244072-5d12893278ab?q=80&w=2560&auto=format&fit=crop');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: #e0f2fe; margin: 0; min-height: 100vh;
+        }
+        /* Very rounded, highly blurred bubbly glass */
+        .glass-bubble {
+            background: rgba(12, 74, 110, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(186, 230, 253, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(186, 230, 253, 0.1);
+            border-radius: 2rem;
+        }
+    </style>
+</head>
+<body class="flex p-4 md:p-6 gap-6">
+    <aside class="glass-bubble w-24 hidden md:flex flex-col items-center py-8 gap-8 shrink-0">
+        <div class="w-12 h-12 bg-sky-400/20 rounded-full flex items-center justify-center border border-sky-400/50">
+            <i class="ph ph-waves text-2xl text-sky-400"></i>
+        </div>
+        <nav class="flex flex-col gap-6">
+            <a href="#" class="p-3 bg-sky-500/30 rounded-2xl text-white shadow-[0_0_15px_rgba(56,189,248,0.5)]"><i class="ph ph-house text-xl"></i></a>
+            <a href="#" class="p-3 hover:bg-sky-500/20 rounded-2xl text-sky-200 transition"><i class="ph ph-drop text-xl"></i></a>
+            <a href="#" class="p-3 hover:bg-sky-500/20 rounded-2xl text-sky-200 transition"><i class="ph ph-compass text-xl"></i></a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col gap-6">
+        <header class="glass-bubble p-6 flex justify-between items-center rounded-full">
+            <h1 class="text-2xl font-light tracking-wide">Mariana <span class="font-bold text-sky-400">Trench</span> Monitoring</h1>
+            <div class="text-sm px-4 py-2 bg-sky-900/50 rounded-full border border-sky-400/30">Depth: -10,994m</div>
+        </header>
+
+        <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass-bubble p-8 flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-sky-500/20 rounded-full blur-3xl"></div>
+                <div>
+                    <h2 class="text-sky-300 font-medium mb-2">Water Pressure</h2>
+                    <p class="text-6xl font-light text-white">1,086 <span class="text-2xl text-sky-400">bar</span></p>
+                </div>
+                <div class="mt-8">
+                    <div class="flex justify-between text-sm mb-2 text-sky-200"><span>Status</span><span>Critical</span></div>
+                    <div class="w-full bg-sky-950/50 h-3 rounded-full overflow-hidden">
+                        <div class="bg-gradient-to-r from-sky-600 to-cyan-300 w-[95%] h-full rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-bubble p-8 flex flex-col justify-center items-center text-center">
+                <i class="ph ph-thermometer text-5xl text-sky-400 mb-4"></i>
+                <h2 class="text-sky-300 font-medium mb-2">Temperature</h2>
+                <p class="text-5xl font-light">2.4°C</p>
+                <p class="text-sm mt-4 text-sky-200 max-w-xs">Stable thermal vents detected 4km North-West of current position.</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

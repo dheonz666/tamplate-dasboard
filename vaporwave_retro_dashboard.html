@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Vaporwave</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background-image: url('https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=2560&auto=format&fit=crop');
+            background-size: cover; background-position: center;
+            color: #fff; font-family: 'Inter', sans-serif;
+            margin: 0; min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .pixel-font { font-family: 'VT323', monospace; text-transform: uppercase; }
+        .glass-box {
+            background: linear-gradient(135deg, rgba(217, 70, 239, 0.1), rgba(6, 182, 212, 0.1));
+            backdrop-filter: blur(16px);
+            border: 2px solid rgba(217, 70, 239, 0.4);
+            box-shadow: 0 0 30px rgba(217, 70, 239, 0.3), inset 0 0 20px rgba(6, 182, 212, 0.2);
+            border-radius: 8px;
+        }
+        .glow-text { text-shadow: 0 0 10px #d946ef, 0 0 20px #d946ef; }
+    </style>
+</head>
+<body class="p-6">
+    <div class="glass-box w-full max-w-4xl p-8 relative overflow-hidden">
+        <!-- Decorative grid overlay -->
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none"></div>
+        
+        <header class="text-center mb-10 relative z-10">
+            <h1 class="pixel-font text-5xl text-fuchsia-400 glow-text mb-2">VIRTUAL_REALITY</h1>
+            <p class="pixel-font text-cyan-400 text-xl tracking-widest">SYSTEM.ONLINE // 198X</p>
+        </header>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
+            <div class="bg-fuchsia-900/40 border border-fuchsia-500/50 p-4 text-center">
+                <p class="pixel-font text-cyan-300">PROCESSOR</p>
+                <p class="pixel-font text-3xl mt-2 text-white">84%</p>
+            </div>
+            <div class="bg-fuchsia-900/40 border border-fuchsia-500/50 p-4 text-center">
+                <p class="pixel-font text-cyan-300">MEMORY</p>
+                <p class="pixel-font text-3xl mt-2 text-white">16 MB</p>
+            </div>
+            <div class="bg-fuchsia-900/40 border border-fuchsia-500/50 p-4 text-center">
+                <p class="pixel-font text-cyan-300">NETWORK</p>
+                <p class="pixel-font text-3xl mt-2 text-white">DIAL-UP</p>
+            </div>
+            <div class="bg-fuchsia-900/40 border border-fuchsia-500/50 p-4 text-center hover:bg-cyan-500/30 transition cursor-pointer">
+                <p class="pixel-font text-fuchsia-300">ACTION</p>
+                <p class="pixel-font text-xl mt-3 text-white glow-text">> CONNECT _</p>
+            </div>
+        </div>
+
+        <div class="mt-8 border border-cyan-500/50 bg-black/40 p-4 relative z-10">
+            <p class="pixel-font text-fuchsia-400 mb-2">SYSTEM_LOG:</p>
+            <ul class="pixel-font text-cyan-200 space-y-1 text-sm">
+                <li>[10:42] Loading aesthetic.dll ... OK</li>
+                <li>[10:43] Establishing connection to mainframe ... FAILED</li>
+                <li>[10:43] Retrying via proxy ... OK</li>
+                <li><span class="animate-pulse">_</span></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
