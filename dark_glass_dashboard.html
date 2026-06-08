@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Neon Glassmorphism Dashboard</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        neon: {
+                            blue: '#00f0ff',
+                            purple: '#8a2be2',
+                            pink: '#ff003c'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            /* Dark Abstract Wallpaper from Unsplash */
+            background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2550&auto=format&fit=crop'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #ffffff;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Dark overlay to make neon colors pop */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(10, 10, 20, 0.4) 0%, rgba(5, 5, 10, 0.8) 100%);
+            z-index: -1;
+        }
+
+        /* Updated Glass Panel with glowing borders */
+        .glass-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-box:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6), 0 0 15px rgba(138, 43, 226, 0.3);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0, 240, 255, 0.5); }
+        
+        /* Neon text utility */
+        .text-glow {
+            text-shadow: 0 0 10px currentColor;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-gray-100 p-4 sm:p-6 md:p-8 flex flex-col gap-6 h-screen overflow-hidden">
+
+    <!-- Floating Top Navigation -->
+    <nav class="glass-box rounded-full px-6 py-4 flex items-center justify-between z-20 shrink-0">
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-neon-blue to-neon-purple flex items-center justify-center shadow-[0_0_15px_rgba(0,240,255,0.5)]">
+                <i class="ph ph-planet text-2xl text-white"></i>
+            </div>
+            <span class="font-bold text-xl tracking-widest hidden sm:block">NEXUS</span>
+        </div>
+
+        <!-- Center Links (Hidden on small screens) -->
+        <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+            <a href="#" class="text-white hover:text-neon-blue transition-colors flex items-center gap-2 relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-full after:h-0.5 after:bg-neon-blue after:shadow-[0_0_8px_#00f0ff]">
+                <i class="ph ph-command"></i> Overview
+            </a>
+            <a href="#" class="text-white/60 hover:text-white transition-colors flex items-center gap-2">
+                <i class="ph ph-chart-polar"></i> Metrics
+            </a>
+            <a href="#" class="text-white/60 hover:text-white transition-colors flex items-center gap-2">
+                <i class="ph ph-wallet"></i> Crypto
+            </a>
+            <a href="#" class="text-white/60 hover:text-white transition-colors flex items-center gap-2">
+                <i class="ph ph-faders"></i> Settings
+            </a>
+        </div>
+
+        <!-- Right Side: Search & Profile -->
+        <div class="flex items-center gap-4">
+            <div class="relative hidden sm:block">
+                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-white/50"></i>
+                <input type="text" placeholder="Search data..." class="bg-white/5 border border-white/10 rounded-full py-2 pl-9 pr-4 text-sm w-48 focus:outline-none focus:border-neon-blue focus:bg-white/10 transition-all text-white placeholder-white/40">
+            </div>
+            <button class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 hover:border-neon-purple transition-all relative">
+                <i class="ph ph-bell text-lg"></i>
+                <span class="absolute top-2 right-2 w-2 h-2 bg-neon-pink rounded-full shadow-[0_0_5px_#ff003c]"></span>
+            </button>
+            <div class="w-10 h-10 rounded-full border-2 border-white/20 overflow-hidden cursor-pointer hover:border-neon-blue transition-all">
+                <img src="https://i.pravatar.cc/150?img=32" alt="Profile" class="w-full h-full object-cover">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area (Scrollable) -->
+    <main class="flex-1 overflow-y-auto pr-2 pb-10 z-10 scroll-smooth">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-full">
+            
+            <!-- Left Column (Span 8) -->
+            <div class="md:col-span-8 flex flex-col gap-6">
+                
+                <!-- Welcome Banner -->
+                <div class="glass-box rounded-3xl p-8 relative overflow-hidden">
+                    <!-- Decorative glow effects inside banner -->
+                    <div class="absolute -top-20 -right-20 w-64 h-64 bg-neon-purple/30 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-neon-blue/20 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div class="relative z-10">
+                        <h1 class="text-3xl sm:text-4xl font-bold mb-2">Welcome back, <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-blue to-neon-purple text-glow">Commander</span></h1>
+                        <p class="text-white/60 mb-6 max-w-lg">System operations are running at optimal capacity. You have 3 new encrypted messages and 2 pending transactions in your network.</p>
+                        <div class="flex gap-4">
+                            <button class="bg-gradient-to-r from-neon-blue to-blue-600 text-white font-medium py-2 px-6 rounded-full hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] transition-all">
+                                View Reports
+                            </button>
+                            <button class="bg-white/5 border border-white/20 text-white font-medium py-2 px-6 rounded-full hover:bg-white/10 transition-all">
+                                Manage Nodes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Cards Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <!-- Stat 1 -->
+                    <div class="glass-box rounded-3xl p-6 flex flex-col justify-between">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-neon-blue/10 border border-neon-blue/30 flex items-center justify-center text-neon-blue text-2xl">
+                                <i class="ph ph-cpu"></i>
+                            </div>
+                            <span class="text-xs font-mono bg-green-500/20 text-green-400 py-1 px-2 rounded-lg border border-green-500/30">ONLINE</span>
+                        </div>
+                        <div>
+                            <p class="text-white/50 text-sm font-medium mb-1">Compute Power</p>
+                            <h3 class="text-2xl font-bold font-mono">84.2<span class="text-sm text-white/50"> TH/s</span></h3>
+                        </div>
+                        <div class="mt-4 w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-neon-blue h-full w-[84%] shadow-[0_0_10px_#00f0ff]"></div>
+                        </div>
+                    </div>
+
+                    <!-- Stat 2 -->
+                    <div class="glass-box rounded-3xl p-6 flex flex-col justify-between">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-neon-purple/10 border border-neon-purple/30 flex items-center justify-center text-neon-purple text-2xl">
+                                <i class="ph ph-database"></i>
+                            </div>
+                            <span class="text-neon-purple text-sm flex items-center gap-1 font-medium">
+                                <i class="ph ph-trend-up"></i> +12%
+                            </span>
+                        </div>
+                        <div>
+                            <p class="text-white/50 text-sm font-medium mb-1">Data Processed</p>
+                            <h3 class="text-2xl font-bold font-mono">1,024<span class="text-sm text-white/50"> TB</span></h3>
+                        </div>
+                        <div class="mt-4 w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-neon-purple h-full w-[65%] shadow-[0_0_10px_#8a2be2]"></div>
+                        </div>
+                    </div>
+
+                    <!-- Stat 3 -->
+                    <div class="glass-box rounded-3xl p-6 flex flex-col justify-between">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-neon-pink/10 border border-neon-pink/30 flex items-center justify-center text-neon-pink text-2xl">
+                                <i class="ph ph-shield-check"></i>
+                            </div>
+                            <span class="text-neon-pink text-sm flex items-center gap-1 font-medium">
+                                <i class="ph ph-warning-circle"></i> 2 Alerts
+                            </span>
+                        </div>
+                        <div>
+                            <p class="text-white/50 text-sm font-medium mb-1">Network Security</p>
+                            <h3 class="text-2xl font-bold font-mono">99.8<span class="text-sm text-white/50"> %</span></h3>
+                        </div>
+                        <div class="mt-4 w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-neon-pink h-full w-[99%] shadow-[0_0_10px_#ff003c]"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Chart -->
+                <div class="glass-box rounded-3xl p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-lg font-semibold">Network Traffic Analysis</h2>
+                            <p class="text-xs text-white/50">Real-time bandwidth usage across nodes</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="px-3 py-1 text-xs rounded-lg bg-white/10 text-white">1H</button>
+                            <button class="px-3 py-1 text-xs rounded-lg bg-neon-blue/20 text-neon-blue border border-neon-blue/30">24H</button>
+                            <button class="px-3 py-1 text-xs rounded-lg bg-white/10 text-white">7D</button>
+                        </div>
+                    </div>
+                    <div class="w-full h-[280px]">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column (Span 4) -->
+            <div class="md:col-span-4 flex flex-col gap-6">
+                
+                <!-- Radar Chart / Asset Distribution -->
+                <div class="glass-box rounded-3xl p-6">
+                    <h2 class="text-lg font-semibold mb-4">System Load</h2>
+                    <div class="w-full h-[220px] flex justify-center items-center relative">
+                        <canvas id="radarChart"></canvas>
+                        <!-- Center text overlay -->
+                        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                            <span class="text-2xl font-bold text-white text-glow">Sync</span>
+                            <span class="text-xs text-white/50 font-mono">ACTIVE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Timeline -->
+                <div class="glass-box rounded-3xl p-6 flex-1 flex flex-col">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-lg font-semibold">Live Events</h2>
+                        <i class="ph ph-dots-three text-2xl text-white/50 cursor-pointer hover:text-white"></i>
+                    </div>
+                    
+                    <div class="relative flex-1 pl-4">
+                        <!-- Vertical Line -->
+                        <div class="absolute left-6 top-2 bottom-0 w-px bg-white/10"></div>
+                        
+                        <!-- Timeline Items -->
+                        <div class="flex gap-4 mb-6 relative">
+                            <div class="w-5 h-5 rounded-full bg-neon-blue/20 border border-neon-blue flex items-center justify-center shrink-0 z-10 shadow-[0_0_8px_#00f0ff]">
+                                <div class="w-1.5 h-1.5 bg-neon-blue rounded-full"></div>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">Node Delta connected</p>
+                                <p class="text-xs text-white/50 mt-1">IP: 192.168.1.104 established secure handshake.</p>
+                                <span class="text-[10px] text-neon-blue font-mono mt-1 block">Just now</span>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 mb-6 relative">
+                            <div class="w-5 h-5 rounded-full bg-neon-purple/20 border border-neon-purple flex items-center justify-center shrink-0 z-10 shadow-[0_0_8px_#8a2be2]">
+                                <div class="w-1.5 h-1.5 bg-neon-purple rounded-full"></div>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">Data backup completed</p>
+                                <p class="text-xs text-white/50 mt-1">45.2 GB transferred to cold storage cluster.</p>
+                                <span class="text-[10px] text-neon-purple font-mono mt-1 block">15 mins ago</span>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 mb-6 relative">
+                            <div class="w-5 h-5 rounded-full bg-neon-pink/20 border border-neon-pink flex items-center justify-center shrink-0 z-10 shadow-[0_0_8px_#ff003c]">
+                                <i class="ph ph-warning text-xs text-neon-pink"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-neon-pink">Unauthorized access attempt</p>
+                                <p class="text-xs text-white/50 mt-1">Firewall blocked 3 requests from unknown origin.</p>
+                                <span class="text-[10px] text-neon-pink font-mono mt-1 block">1 hour ago</span>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 relative">
+                            <div class="w-5 h-5 rounded-full bg-white/10 border border-white/30 flex items-center justify-center shrink-0 z-10">
+                                <div class="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-white/70">System restart initiated</p>
+                                <p class="text-xs text-white/40 mt-1">Routine maintenance schedule.</p>
+                                <span class="text-[10px] text-white/40 font-mono mt-1 block">Yesterday</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full mt-6 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-medium hover:bg-white/10 transition-colors text-white/70">
+                        View Complete Logs
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Global Chart Defaults for dark theme
+        Chart.defaults.color = 'rgba(255, 255, 255, 0.6)';
+        Chart.defaults.font.family = 'Inter, monospace';
+        Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(10, 10, 20, 0.8)';
+        Chart.defaults.plugins.tooltip.titleColor = '#fff';
+        Chart.defaults.plugins.tooltip.bodyColor = '#fff';
+        Chart.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.1)';
+        Chart.defaults.plugins.tooltip.borderWidth = 1;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- MAIN CHART (BAR/LINE HYBRID) ---
+            const ctxMain = document.getElementById('mainChart').getContext('2d');
+            
+            // Gradients
+            const gradBlue = ctxMain.createLinearGradient(0, 0, 0, 300);
+            gradBlue.addColorStop(0, 'rgba(0, 240, 255, 0.8)');
+            gradBlue.addColorStop(1, 'rgba(0, 240, 255, 0.0)');
+
+            const gradPurple = ctxMain.createLinearGradient(0, 0, 0, 300);
+            gradPurple.addColorStop(0, 'rgba(138, 43, 226, 0.8)');
+            gradPurple.addColorStop(1, 'rgba(138, 43, 226, 0.0)');
+
+            new Chart(ctxMain, {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+                    datasets: [
+                        {
+                            label: 'Incoming Traffic',
+                            data: [30, 45, 25, 60, 40, 80, 55],
+                            borderColor: '#00f0ff',
+                            backgroundColor: gradBlue,
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#00f0ff',
+                            pointBorderColor: '#fff',
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'Outgoing Traffic',
+                            data: [15, 20, 40, 30, 65, 35, 50],
+                            borderColor: '#8a2be2',
+                            backgroundColor: gradPurple,
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#8a2be2',
+                            pointBorderColor: '#fff',
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            align: 'end',
+                            labels: { boxWidth: 10, usePointStyle: true }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            border: { display: false }
+                        },
+                        x: {
+                            grid: { display: false },
+                            border: { display: false }
+                        }
+                    },
+                    interaction: { mode: 'index', intersect: false }
+                }
+            });
+
+            // --- RADAR/DOUGHNUT CHART ---
+            const ctxRadar = document.getElementById('radarChart').getContext('2d');
+            
+            new Chart(ctxRadar, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Core', 'Memory', 'Storage', 'Network'],
+                    datasets: [{
+                        data: [35, 25, 20, 20],
+                        backgroundColor: [
+                            'rgba(0, 240, 255, 0.8)',   // Neon Blue
+                            'rgba(138, 43, 226, 0.8)',  // Neon Purple
+                            'rgba(255, 0, 60, 0.8)',    // Neon Pink
+                            'rgba(255, 255, 255, 0.2)'  // Whiteish
+                        ],
+                        borderColor: 'rgba(20, 20, 30, 0.5)',
+                        borderWidth: 2,
+                        hoverOffset: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '80%', // Thin ring
+                    plugins: {
+                        legend: { display: false } // Hidden legend, text is in center via HTML
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
