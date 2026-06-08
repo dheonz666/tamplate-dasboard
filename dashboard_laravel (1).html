@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Aplikasi</title>
+    
+    <!-- Tailwind CSS (Gunakan NPM run dev di Laravel asli) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons (Alternatif ringan untuk icon di Blade) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Alpine.js (Sangat umum digunakan di Laravel untuk interaktivitas UI) -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        /* Mencegah kedipan sebelum Alpine.js dimuat */
+        [x-cloak] { display: none !important; }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased" 
+      x-data="dashboardApp()" 
+      @resize.window="handleResize()">
+
+    <div class="min-h-screen flex">
+        
+        <!-- ========================================== -->
+        <!-- SIDEBAR (DESKTOP)                          -->
+        <!-- ========================================== -->
+        <aside class="fixed top-0 left-0 h-full bg-white border-r border-slate-200 transition-all duration-300 z-30 hidden md:flex flex-col"
+               :class="sidebarOpen ? 'w-64' : 'w-20'">
+            
+            <!-- Sidebar Header -->
+            <div class="flex items-center h-20 px-4 border-b border-slate-100"
+                 :class="sidebarOpen ? 'justify-between' : 'justify-center'">
+                
+                <!-- Logo -->
+                <div class="flex items-center gap-3" x-show="sidebarOpen" x-transition>
+                    <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md shadow-indigo-200 flex-shrink-0">
+                        P
+                    </div>
+                    <span class="font-bold text-xl text-slate-800 tracking-tight whitespace-nowrap">PortalKu</span>
+                </div>
+
+                <!-- Toggle Button -->
+                <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors">
+                    <i class="ph ph-caret-left text-xl" x-show="sidebarOpen"></i>
+                    <i class="ph ph-list text-2xl" x-show="!sidebarOpen" x-cloak></i>
+                </button>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <div class="flex-1 overflow-y-auto py-6 px-3 flex flex-col gap-2">
+                
+                <button @click="activeMenu = 'dashboard'" 
+                        :class="activeMenu === 'dashboard' ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'"
+                        class="flex items-center gap-3 px-3 py-3 rounded-xl transition-colors"
+                        :class="!sidebarOpen && 'justify-center'">
+                    <i class="ph ph-house text-2xl"></i>
+                    <span class="font-medium" x-show="sidebarOpen">Dashboard Utama</span>
+                </button>
+                
+                <button @click="activeMenu = 'apps'" 
+                        :class="activeMenu === 'apps' ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'"
+                        class="flex items-center gap-3 px-3 py-3 rounded-xl transition-colors"
+                        :class="!sidebarOpen && 'justify-center'">
+                    <i class="ph ph-squares-four text-2xl"></i>
+                    <span class="font-medium" x-show="sidebarOpen">Katalog Aplikasi</span>
+                </button>
+
+                <button @click="activeMenu = 'notifications'" 
+                        :class="activeMenu === 'notifications' ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'"
+                        class="flex items-center gap-3 px-3 py-3 rounded-xl transition-colors relative"
+                        :class="!sidebarOpen && 'justify-center'">
+                    <i class="ph ph-bell text-2xl"></i>
+                    <span class="absolute top-3 left-7 w-2 h-2 bg-red-500 rounded-full"></span>
+                    <span class="font-medium" x-show="sidebarOpen">Notifikasi</span>
+                    <span x-show="sidebarOpen" class="ml-auto bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded-full">3</span>
+                </button>
+
+                <!-- Menu Dropdown 1: Data Master -->
+                <div class="flex flex-col gap-1">
+                    <button @click="toggleDropdown('master')" 
+                            :class="openDropdown === 'master' ? 'bg-slate-100 text-slate-800' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'"
+                            class="flex items-center justify-between px-3 py-3 rounded-xl transition-colors w-full"
+                            :class="!sidebarOpen && 'justify-center'">
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-database text-2xl"></i>
+                            <span class="font-medium" x-show="sidebarOpen">Data Master</span>
+                        </div>
+                        <i class="ph ph-caret-down transition-transform" 
+                           x-show="sidebarOpen"
+                           :class="openDropdown === 'master' ? 'rotate-180' : ''"></i>
+                    </button>
+                    <!-- Sub-menus (Hanya tampil jika openDropdown === 'master') -->
+                    <div x-show="openDropdown === 'master' && sidebarOpen" 
+                         x-transition.opacity
+                         class="flex flex-col gap-1 pl-11 pr-3 py-1">
+                        <button @click="activeMenu = 'users'" :class="activeMenu === 'users' ? 'text-indigo-600' : 'text-slate-500'" class="text-left text-sm font-medium hover:text-indigo-600 py-2 w-full transition-colors">Data Pengguna</button>
+                        <button @click="activeMenu = 'roles'" :class="activeMenu === 'roles' ? 'text-indigo-600' : 'text-slate-500'" class="text-left text-sm font-medium hover:text-indigo-600 py-2 w-full transition-colors">Hak Akses (Roles)</button>
+                        <button @click="activeMenu = 'departments'" :class="activeMenu === 'departments' ? 'text-indigo-600' : 'text-slate-500'" class="text-left text-sm font-medium hover:text-indigo-600 py-2 w-full transition-colors">Departemen</button>
+                    </div>
+                </div>
+
+                <div class="mt-8 mb-2 px-3">
+                    <p x-show="sidebarOpen" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Pengaturan</p>
+                    <div x-show="!sidebarOpen" class="w-full border-t border-slate-200"></div>
+                </div>
+
+                <button @click="activeMenu = 'profile'" 
+                        :class="activeMenu === 'profile' ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'"
+                        class="flex items-center gap-3 px-3 py-3 rounded-xl transition-colors"
+                        :class="!sidebarOpen && 'justify-center'">
+                    <i class="ph ph-user text-2xl"></i>
+                    <span class="font-medium" x-show="sidebarOpen">Profil Saya</span>
+                </button>
+
+                <!-- Menu Dropdown 2: Pengaturan Sistem -->
+                <div class="flex flex-col gap-1">
+                    <button @click="toggleDropdown('settings')" 
+                            :class="openDropdown === 'settings' ? 'bg-slate-100 text-slate-800' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'"
+                            class="flex items-center justify-between px-3 py-3 rounded-xl transition-colors w-full"
+                            :class="!sidebarOpen && 'justify-center'">
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-gear text-2xl"></i>
+                            <span class="font-medium" x-show="sidebarOpen">Pengaturan</span>
+                        </div>
+                        <i class="ph ph-caret-down transition-transform" 
+                           x-show="sidebarOpen"
+                           :class="openDropdown === 'settings' ? 'rotate-180' : ''"></i>
+                    </button>
+                    <!-- Sub-menus (Hanya tampil jika openDropdown === 'settings') -->
+                    <div x-show="openDropdown === 'settings' && sidebarOpen" 
+                         x-transition.opacity
+                         class="flex flex-col gap-1 pl-11 pr-3 py-1">
+                        <button @click="activeMenu = 'web_config'" :class="activeMenu === 'web_config' ? 'text-indigo-600' : 'text-slate-500'" class="text-left text-sm font-medium hover:text-indigo-600 py-2 w-full transition-colors">Konfigurasi Web</button>
+                        <button @click="activeMenu = 'api_keys'" :class="activeMenu === 'api_keys' ? 'text-indigo-600' : 'text-slate-500'" class="text-left text-sm font-medium hover:text-indigo-600 py-2 w-full transition-colors">API Keys</button>
+                        <button @click="activeMenu = 'logs'" :class="activeMenu === 'logs' ? 'text-indigo-600' : 'text-slate-500'" class="text-left text-sm font-medium hover:text-indigo-600 py-2 w-full transition-colors">System Logs</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Footer (Logout) -->
+            <!-- Di Laravel ini biasanya berupa form POST ke route logout -->
+            <div class="p-4 border-t border-slate-100">
+                <button class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-colors"
+                        :class="!sidebarOpen && 'justify-center'">
+                    <i class="ph ph-sign-out text-2xl"></i>
+                    <span class="font-medium" x-show="sidebarOpen">Keluar</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ========================================== -->
+        <!-- MAIN CONTENT WRAPPER                       -->
+        <!-- ========================================== -->
+        <div class="flex-1 flex flex-col transition-all duration-300 pb-20 md:pb-0"
+             :class="isMobile ? 'ml-0' : (sidebarOpen ? 'ml-64' : 'ml-20')">
+            
+            <!-- Header Atas (Desktop & Mobile) -->
+            <header class="bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-20">
+                <!-- Mobile Brand -->
+                <div class="flex items-center gap-2 md:hidden">
+                    <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-sm shadow-indigo-200">P</div>
+                    <span class="font-bold text-lg text-slate-800 tracking-tight">PortalKu</span>
+                </div>
+
+                <!-- Desktop Search -->
+                <div class="hidden md:flex items-center flex-1 max-w-md relative">
+                    <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                    <input type="text" x-model="searchQuery" placeholder="Cari aplikasi atau menu..." 
+                           class="w-full pl-10 pr-4 py-2.5 bg-slate-100/50 border border-slate-200 rounded-full text-sm focus:bg-white focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100/50 outline-none transition-all">
+                </div>
+                
+                <!-- User Info -->
+                <!-- Di Laravel, nama user diambil dari {{ auth()->user()->name }} -->
+                <div class="hidden md:flex items-center gap-4 ml-auto">
+                    <div class="text-right">
+                        <p class="text-sm font-semibold text-slate-700">Ahmad Budi</p>
+                        <p class="text-xs text-slate-500">Administrator</p>
+                    </div>
+                    <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Budi&backgroundColor=e0e7ff" alt="Profile" 
+                         class="w-10 h-10 rounded-full border border-slate-200 cursor-pointer hover:border-indigo-300 transition-colors">
+                </div>
+            </header>
+
+            <!-- ========================================== -->
+            <!-- AREA KONTEN UTAMA                          -->
+            <!-- ========================================== -->
+            <main class="flex-1 px-4 sm:px-6 py-8 max-w-7xl mx-auto w-full">
+                
+                <!-- Welcome Banner -->
+                <div class="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-[2rem] p-6 md:p-10 mb-8 text-white shadow-xl shadow-indigo-100/50 flex flex-col md:flex-row items-center justify-between overflow-hidden relative">
+                    <!-- Ornamen Background -->
+                    <div class="absolute top-0 right-0 w-full h-full overflow-hidden pointer-events-none">
+                        <div class="absolute -top-24 -right-24 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl"></div>
+                        <div class="absolute bottom-0 right-1/4 w-64 h-64 bg-blue-400 opacity-20 rounded-full blur-2xl"></div>
+                    </div>
+                    
+                    <div class="relative z-10 w-full md:w-auto text-center md:text-left">
+                        <!-- Di Laravel: {{ now()->translatedFormat('l, d F Y') }} -->
+                        <p class="text-indigo-100/80 mb-2 font-medium text-sm md:text-base">Senin, 8 Juni 2026</p>
+                        <h1 class="text-3xl md:text-5xl font-bold mb-4 tracking-tight">Halo, Ahmad! 👋</h1>
+                        <p class="text-indigo-50/90 max-w-xl text-base md:text-lg leading-relaxed">
+                            Pilih ruang kerja Anda di bawah ini untuk melanjutkan aktivitas hari ini.
+                        </p>
+                    </div>
+                    
+                    <div class="mt-8 md:mt-0 relative z-10 bg-white/10 backdrop-blur-md p-4 md:p-5 rounded-2xl border border-white/20 flex items-center gap-4 w-full md:w-auto justify-center">
+                        <div class="bg-white/20 text-white p-3 rounded-xl">
+                            <i class="ph ph-clock text-3xl"></i>
+                        </div>
+                        <div class="text-left">
+                            <p class="text-sm text-indigo-100/80 font-medium">Sesi Login</p>
+                            <p class="font-bold text-xl tracking-wide">08:15 WIB</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Search Bar -->
+                <div class="md:hidden mb-6 relative">
+                    <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl"></i>
+                    <input type="text" x-model="searchQuery" placeholder="Cari aplikasi..." 
+                           class="w-full pl-12 pr-4 py-3.5 bg-white border border-slate-200 rounded-2xl text-base focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100/50 outline-none transition-all shadow-sm">
+                </div>
+
+                <!-- Tabs Control -->
+                <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+                    <div class="flex bg-slate-200/60 p-1.5 rounded-2xl w-full sm:w-auto">
+                        <button @click="activeTab = 'all'"
+                                :class="activeTab === 'all' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'"
+                                class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all">
+                            <i class="ph ph-squares-four text-lg"></i> Semua
+                        </button>
+                        <button @click="activeTab = 'favorites'"
+                                :class="activeTab === 'favorites' ? 'bg-white text-amber-500 shadow-sm' : 'text-slate-500 hover:text-slate-800'"
+                                class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all">
+                            <i class="ph-fill ph-star text-lg"></i> Favorit
+                        </button>
+                    </div>
+                    
+                    <div class="text-sm text-slate-500 font-medium hidden sm:block">
+                        Menampilkan <span x-text="filteredApps.length"></span> aplikasi
+                    </div>
+                </div>
+
+                <!-- Apps Grid -->
+                <!-- Di Laravel asli, bagian x-for ini bisa diganti dengan @foreach($apps as $app) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" x-show="filteredApps.length > 0">
+                    <template x-for="app in filteredApps" :key="app.id">
+                        <!-- URL aplikasi di laravel biasanya berupa {{ route('app.redirect', $app->id) }} -->
+                        <a :href="app.url || '#'" 
+                           class="group bg-white border border-slate-200 rounded-3xl p-6 hover:shadow-2xl hover:shadow-indigo-500/5 hover:border-indigo-200 transition-all duration-300 cursor-pointer flex flex-col h-full active:scale-[0.98] block">
+                            
+                            <div class="flex justify-between items-start mb-5">
+                                <div class="w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300"
+                                     :class="app.color">
+                                    <i :class="app.icon + ' text-3xl'"></i>
+                                </div>
+                                <button class="text-slate-300 hover:text-amber-400 transition-colors p-2 -mr-2 -mt-2"
+                                        @click.prevent="toggleFavorite(app.id)">
+                                    <i class="text-2xl" :class="app.isFavorite ? 'ph-fill ph-star text-amber-400' : 'ph ph-star'"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="mb-1.5 text-[11px] font-bold tracking-widest text-slate-400 uppercase" x-text="app.category"></div>
+                            <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-indigo-600 transition-colors" x-text="app.name"></h3>
+                            <p class="text-slate-500 text-sm mb-6 flex-grow leading-relaxed" x-text="app.desc"></p>
+                            
+                            <div class="pt-4 border-t border-slate-100 flex justify-between items-center mt-auto">
+                                <span class="text-sm font-semibold text-indigo-600 flex items-center gap-1 group-hover:translate-x-2 transition-transform duration-300">
+                                    Buka Aplikasi <i class="ph ph-caret-right"></i>
+                                </span>
+                            </div>
+                        </a>
+                    </template>
+                </div>
+
+                <!-- Empty State -->
+                <div x-show="filteredApps.length === 0" x-cloak class="text-center py-24 bg-white rounded-[2rem] border border-slate-200 border-dashed">
+                    <i class="ph ph-magnifying-glass text-6xl text-slate-300 mb-5 inline-block"></i>
+                    <h3 class="text-xl font-bold text-slate-700 mb-2">Tidak ditemukan</h3>
+                    <p class="text-slate-500 max-w-md mx-auto">Aplikasi yang Anda cari "<span x-text="searchQuery"></span>" tidak tersedia.</p>
+                    <button @click="searchQuery = ''" class="mt-6 px-6 py-2 bg-indigo-50 text-indigo-600 font-semibold rounded-xl hover:bg-indigo-100 transition-colors">
+                        Hapus Pencarian
+                    </button>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MOBILE BOTTOM NAVIGATION                   -->
+        <!-- ========================================== -->
+        <div class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-slate-200 z-40 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.05)]"
+             x-show="isMobile">
+            <div class="flex justify-around items-center h-16">
+                <button @click="activeMenu = 'dashboard'" class="flex flex-col items-center justify-center w-full h-full space-y-1"
+                        :class="activeMenu === 'dashboard' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'">
+                    <i class="text-2xl" :class="activeMenu === 'dashboard' ? 'ph-fill ph-house' : 'ph ph-house'"></i>
+                    <span class="text-[10px] font-medium">Beranda</span>
+                </button>
+                
+                <button @click="activeMenu = 'apps'" class="flex flex-col items-center justify-center w-full h-full space-y-1"
+                        :class="activeMenu === 'apps' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'">
+                    <i class="text-2xl" :class="activeMenu === 'apps' ? 'ph-fill ph-squares-four' : 'ph ph-squares-four'"></i>
+                    <span class="text-[10px] font-medium">Aplikasi</span>
+                </button>
+
+                <!-- Tombol Tengah (Search Focus) -->
+                <button @click="document.querySelector('input').focus(); window.scrollTo(0,0);" 
+                        class="flex flex-col items-center justify-center w-full h-full -mt-6">
+                    <div class="bg-indigo-600 text-white p-3 rounded-full shadow-lg shadow-indigo-200">
+                        <i class="ph ph-magnifying-glass text-2xl"></i>
+                    </div>
+                </button>
+
+                <button @click="activeMenu = 'notifications'" class="flex flex-col items-center justify-center w-full h-full space-y-1 relative"
+                        :class="activeMenu === 'notifications' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'">
+                    <i class="text-2xl" :class="activeMenu === 'notifications' ? 'ph-fill ph-bell' : 'ph ph-bell'"></i>
+                    <span class="absolute top-3 right-6 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    <span class="text-[10px] font-medium">Notif</span>
+                </button>
+
+                <button @click="activeMenu = 'profile'" class="flex flex-col items-center justify-center w-full h-full space-y-1"
+                        :class="activeMenu === 'profile' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'">
+                    <i class="text-2xl" :class="activeMenu === 'profile' ? 'ph-fill ph-user' : 'ph ph-user'"></i>
+                    <span class="text-[10px] font-medium">Profil</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script Alpine.js Component -->
+    <script>
+        function dashboardApp() {
+            return {
+                activeTab: 'all',
+                searchQuery: '',
+                activeMenu: 'dashboard',
+                sidebarOpen: window.innerWidth >= 768,
+                isMobile: window.innerWidth < 768,
+                openDropdown: null, // State untuk melacak menu dropdown mana yang sedang terbuka
+                
+                // Di Laravel, data ini biasanya di-parsing dari Controller
+                // contoh: apps: @json($apps)
+                apps: [
+                    { id: 1, name: 'Sistem HRIS', category: 'Karyawan', icon: 'ph ph-users', color: 'bg-blue-100 text-blue-600', desc: 'Absensi, cuti, dan data karyawan.', isFavorite: true },
+                    { id: 2, name: 'E-Procurement', category: 'Keuangan', icon: 'ph ph-calculator', color: 'bg-green-100 text-green-600', desc: 'Pengadaan barang dan manajemen vendor.', isFavorite: false },
+                    { id: 3, name: 'CRM Marketing', category: 'Pemasaran', icon: 'ph ph-briefcase', color: 'bg-purple-100 text-purple-600', desc: 'Manajemen prospek dan data pelanggan.', isFavorite: true },
+                    { id: 4, name: 'Helpdesk Support', category: 'Layanan', icon: 'ph ph-chat-circle-dots', color: 'bg-orange-100 text-orange-600', desc: 'Tiket bantuan dan keluhan pelanggan.', isFavorite: false },
+                    { id: 5, name: 'Document Center', category: 'Operasional', icon: 'ph ph-file-text', color: 'bg-teal-100 text-teal-600', desc: 'Arsip dokumen dan SOP perusahaan.', isFavorite: false },
+                    { id: 6, name: 'Analitik Bisnis', category: 'Manajemen', icon: 'ph ph-chart-pie-slice', color: 'bg-indigo-100 text-indigo-600', desc: 'Dashboard laporan dan metrik performa.', isFavorite: true },
+                    { id: 7, name: 'Task Manager', category: 'Produktivitas', icon: 'ph ph-check-square-offset', color: 'bg-pink-100 text-pink-600', desc: 'Manajemen tugas dan kolaborasi tim.', isFavorite: false }
+                ],
+                
+                handleResize() {
+                    this.isMobile = window.innerWidth < 768;
+                    if (this.isMobile) {
+                        this.sidebarOpen = false;
+                    } else {
+                        this.sidebarOpen = true;
+                    }
+                },
+                
+                get filteredApps() {
+                    return this.apps.filter(app => {
+                        const searchLower = this.searchQuery.toLowerCase();
+                        const matchesSearch = app.name.toLowerCase().includes(searchLower) || 
+                                              app.category.toLowerCase().includes(searchLower);
+                        
+                        if (this.activeTab === 'favorites') {
+                            return app.isFavorite && matchesSearch;
+                        }
+                        return matchesSearch;
+                    });
+                },
+
+                // Fungsi baru untuk membuka/menutup submenu
+                toggleDropdown(menuName) {
+                    // Jika sidebar sedang ditutup, otomatis buka sidebar saat menu diklik
+                    if (!this.sidebarOpen) {
+                        this.sidebarOpen = true; 
+                    }
+                    // Jika menu yang sama diklik, tutup (null). Jika menu beda, buka menu tersebut.
+                    this.openDropdown = this.openDropdown === menuName ? null : menuName;
+                },
+
+                toggleFavorite(id) {
+                    // Di implementasi asli Laravel, Anda bisa memanggil axios/fetch ke API untuk menyimpan status favorit ke database
+                    const app = this.apps.find(a => a.id === id);
+                    if (app) app.isFavorite = !app.isFavorite;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

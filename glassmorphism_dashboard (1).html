@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glassmorphism Dashboard</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom Config for Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        glass: {
+                            100: 'rgba(255, 255, 255, 0.1)',
+                            200: 'rgba(255, 255, 255, 0.2)',
+                            300: 'rgba(255, 255, 255, 0.3)',
+                            border: 'rgba(255, 255, 255, 0.4)'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for animated background and glass effect base -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            /* Wallpaper Background from Unsplash */
+            background-image: url('https://images.unsplash.com/photo-1557682250-33bd709cbe85?q=80&w=2529&auto=format&fit=crop'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Overlay gelap transparan agar teks tetap mudah dibaca */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.25);
+            z-index: -1;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1); /* Dibuat sedikit lebih transparan untuk menonjolkan wallpaper */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2); /* Bayangan sedikit diperbesar untuk kedalaman */
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
+    </style>
+</head>
+<body class="font-sans antialiased text-white relative">
+
+    <!-- Main Application Container -->
+    <div class="flex h-screen overflow-hidden relative z-10 p-2 sm:p-4 md:p-6 lg:p-8 gap-6">
+
+        <!-- Sidebar -->
+        <aside class="glass-panel w-20 md:w-64 flex-shrink-0 rounded-3xl flex flex-col transition-all duration-300">
+            <!-- Logo Area -->
+            <div class="h-20 flex items-center justify-center md:justify-start md:px-8 border-b border-white/20">
+                <i class="ph ph-hexagon-fill text-3xl text-white"></i>
+                <span class="ml-3 font-bold text-xl hidden md:block tracking-wide">Lumina</span>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-1 py-6 flex flex-col gap-2 px-3 md:px-4">
+                <a href="#" class="flex items-center px-3 py-3 rounded-xl bg-white/20 hover:bg-white/30 transition-colors group">
+                    <i class="ph ph-squares-four text-2xl"></i>
+                    <span class="ml-4 font-medium hidden md:block">Dashboard</span>
+                </a>
+                <a href="#" class="flex items-center px-3 py-3 rounded-xl hover:bg-white/10 transition-colors group">
+                    <i class="ph ph-chart-line-up text-2xl text-white/70 group-hover:text-white transition-colors"></i>
+                    <span class="ml-4 font-medium hidden md:block text-white/70 group-hover:text-white transition-colors">Analytics</span>
+                </a>
+                <a href="#" class="flex items-center px-3 py-3 rounded-xl hover:bg-white/10 transition-colors group">
+                    <i class="ph ph-users text-2xl text-white/70 group-hover:text-white transition-colors"></i>
+                    <span class="ml-4 font-medium hidden md:block text-white/70 group-hover:text-white transition-colors">Audience</span>
+                </a>
+                <a href="#" class="flex items-center px-3 py-3 rounded-xl hover:bg-white/10 transition-colors group">
+                    <i class="ph ph-wallet text-2xl text-white/70 group-hover:text-white transition-colors"></i>
+                    <span class="ml-4 font-medium hidden md:block text-white/70 group-hover:text-white transition-colors">Finance</span>
+                </a>
+                <a href="#" class="flex items-center px-3 py-3 rounded-xl hover:bg-white/10 transition-colors group">
+                    <i class="ph ph-gear text-2xl text-white/70 group-hover:text-white transition-colors"></i>
+                    <span class="ml-4 font-medium hidden md:block text-white/70 group-hover:text-white transition-colors">Settings</span>
+                </a>
+            </nav>
+
+            <!-- User Profile Bottom -->
+            <div class="p-4 border-t border-white/20">
+                <div class="flex items-center justify-center md:justify-start gap-3">
+                    <img src="https://i.pravatar.cc/150?img=68" alt="User" class="w-10 h-10 rounded-full border-2 border-white/50 object-cover">
+                    <div class="hidden md:block">
+                        <p class="text-sm font-semibold">Alex Danvers</p>
+                        <p class="text-xs text-white/60">Pro Plan</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden rounded-3xl">
+            
+            <!-- Top Header (Also Glass) -->
+            <header class="glass-panel rounded-3xl h-20 mb-6 flex items-center justify-between px-6 md:px-8 shrink-0">
+                <div>
+                    <h1 class="text-2xl font-semibold tracking-tight">Overview</h1>
+                    <p class="text-sm text-white/70 hidden sm:block">Welcome back, here's what's happening today.</p>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <!-- Search Bar -->
+                    <div class="hidden md:flex items-center bg-black/10 rounded-full px-4 py-2 border border-white/20 focus-within:border-white/50 focus-within:bg-black/20 transition-all">
+                        <i class="ph ph-magnifying-glass text-white/70"></i>
+                        <input type="text" placeholder="Search..." class="bg-transparent border-none outline-none text-sm text-white placeholder-white/50 ml-2 w-48">
+                    </div>
+                    
+                    <!-- Notifications -->
+                    <button class="relative p-2 rounded-full hover:bg-white/10 transition-colors">
+                        <i class="ph ph-bell text-2xl"></i>
+                        <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-transparent"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto pr-2 pb-2">
+                
+                <!-- Stat Cards Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <!-- Card 1 -->
+                    <div class="glass-panel rounded-3xl p-6 relative overflow-hidden group hover:bg-white/20 transition-all cursor-pointer">
+                        <div class="absolute -right-6 -top-6 w-24 h-24 bg-white/10 rounded-full blur-xl group-hover:bg-white/20 transition-all"></div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-white/70 text-sm font-medium mb-1">Total Revenue</p>
+                                <h3 class="text-3xl font-bold">$45,231</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-green-400/20 flex items-center justify-center border border-green-400/30">
+                                <i class="ph ph-currency-dollar text-green-300 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-300 flex items-center font-medium"><i class="ph ph-trend-up mr-1"></i> +12.5%</span>
+                            <span class="text-white/50 ml-2">from last month</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="glass-panel rounded-3xl p-6 relative overflow-hidden group hover:bg-white/20 transition-all cursor-pointer">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-white/70 text-sm font-medium mb-1">Active Users</p>
+                                <h3 class="text-3xl font-bold">2,405</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-blue-400/20 flex items-center justify-center border border-blue-400/30">
+                                <i class="ph ph-users-three text-blue-300 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-300 flex items-center font-medium"><i class="ph ph-trend-up mr-1"></i> +5.2%</span>
+                            <span class="text-white/50 ml-2">from last month</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="glass-panel rounded-3xl p-6 relative overflow-hidden group hover:bg-white/20 transition-all cursor-pointer">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-white/70 text-sm font-medium mb-1">Conversion Rate</p>
+                                <h3 class="text-3xl font-bold">3.8%</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-purple-400/20 flex items-center justify-center border border-purple-400/30">
+                                <i class="ph ph-target text-purple-300 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-red-300 flex items-center font-medium"><i class="ph ph-trend-down mr-1"></i> -1.1%</span>
+                            <span class="text-white/50 ml-2">from last month</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="glass-panel rounded-3xl p-6 relative overflow-hidden group hover:bg-white/20 transition-all cursor-pointer">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-white/70 text-sm font-medium mb-1">Server Uptime</p>
+                                <h3 class="text-3xl font-bold">99.9%</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-orange-400/20 flex items-center justify-center border border-orange-400/30">
+                                <i class="ph ph-hard-drives text-orange-300 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-white/70 flex items-center font-medium">Stable</span>
+                            <span class="text-white/50 ml-2">across all nodes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Main Chart (Takes 2 columns on large screens) -->
+                    <div class="glass-panel rounded-3xl p-6 lg:col-span-2">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-lg font-semibold">Revenue Overview</h2>
+                            <select class="bg-black/20 border border-white/20 text-white text-sm rounded-lg focus:ring-white/50 focus:border-white/50 block p-2 outline-none backdrop-blur-md">
+                                <option class="text-gray-900">This Year</option>
+                                <option class="text-gray-900">Last Year</option>
+                            </select>
+                        </div>
+                        <div class="relative h-64 w-full">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Secondary Chart -->
+                    <div class="glass-panel rounded-3xl p-6 flex flex-col">
+                        <h2 class="text-lg font-semibold mb-6">Traffic Sources</h2>
+                        <div class="relative flex-1 w-full flex items-center justify-center min-h-[200px]">
+                            <canvas id="trafficChart"></canvas>
+                        </div>
+                        <!-- Custom Legend below chart -->
+                        <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
+                            <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-[rgba(255,255,255,0.8)] mr-2"></span>Direct</div>
+                            <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-[rgba(255,255,255,0.4)] mr-2"></span>Social</div>
+                            <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-[rgba(255,255,255,0.1)] mr-2 border border-white/30"></span>Referral</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Table -->
+                <div class="glass-panel rounded-3xl p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-lg font-semibold">Recent Transactions</h2>
+                        <button class="text-sm font-medium text-white/80 hover:text-white transition-colors">View All</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="text-xs uppercase text-white/60 border-b border-white/20">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3 font-medium">Transaction ID</th>
+                                    <th scope="col" class="px-4 py-3 font-medium">Client</th>
+                                    <th scope="col" class="px-4 py-3 font-medium">Amount</th>
+                                    <th scope="col" class="px-4 py-3 font-medium">Date</th>
+                                    <th scope="col" class="px-4 py-3 font-medium text-right">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-white/10 hover:bg-white/5 transition-colors">
+                                    <td class="px-4 py-4 font-mono">#TXN-8392</td>
+                                    <td class="px-4 py-4 flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-blue-500/30 flex items-center justify-center text-blue-200 font-bold border border-blue-500/50">S</div>
+                                        Stark Industries
+                                    </td>
+                                    <td class="px-4 py-4 font-medium">$4,500.00</td>
+                                    <td class="px-4 py-4 text-white/70">Today, 10:42 AM</td>
+                                    <td class="px-4 py-4 text-right">
+                                        <span class="bg-green-500/20 text-green-200 border border-green-500/30 py-1 px-3 rounded-full text-xs">Completed</span>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-white/10 hover:bg-white/5 transition-colors">
+                                    <td class="px-4 py-4 font-mono">#TXN-8391</td>
+                                    <td class="px-4 py-4 flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-purple-500/30 flex items-center justify-center text-purple-200 font-bold border border-purple-500/50">W</div>
+                                        Wayne Enterprises
+                                    </td>
+                                    <td class="px-4 py-4 font-medium">$12,050.00</td>
+                                    <td class="px-4 py-4 text-white/70">Yesterday, 03:15 PM</td>
+                                    <td class="px-4 py-4 text-right">
+                                        <span class="bg-yellow-500/20 text-yellow-200 border border-yellow-500/30 py-1 px-3 rounded-full text-xs">Pending</span>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-white/5 transition-colors">
+                                    <td class="px-4 py-4 font-mono">#TXN-8390</td>
+                                    <td class="px-4 py-4 flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-orange-500/30 flex items-center justify-center text-orange-200 font-bold border border-orange-500/50">A</div>
+                                        Acme Corp
+                                    </td>
+                                    <td class="px-4 py-4 font-medium">$850.00</td>
+                                    <td class="px-4 py-4 text-white/70">Oct 24, 09:30 AM</td>
+                                    <td class="px-4 py-4 text-right">
+                                        <span class="bg-green-500/20 text-green-200 border border-green-500/30 py-1 px-3 rounded-full text-xs">Completed</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Bottom spacing -->
+                <div class="h-6"></div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts for Charts -->
+    <script>
+        // Common Chart.js settings for glass theme
+        Chart.defaults.color = 'rgba(255, 255, 255, 0.7)';
+        Chart.defaults.font.family = 'Inter, sans-serif';
+
+        // Wait for DOM to load
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // 1. Revenue Line Chart
+            const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
+            
+            // Create gradient for the line area
+            const gradientRevenue = ctxRevenue.createLinearGradient(0, 0, 0, 400);
+            gradientRevenue.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+            gradientRevenue.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+
+            new Chart(ctxRevenue, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Revenue',
+                        data: [12000, 19000, 15000, 25000, 22000, 30000, 28000, 35000, 32000, 40000, 38000, 45231],
+                        borderColor: 'rgba(255, 255, 255, 0.9)',
+                        backgroundColor: gradientRevenue,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: 'rgba(255,255,255,0.5)',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: true,
+                        tension: 0.4 // Smooth curves
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                            backdropFilter: 'blur(4px)',
+                            padding: 12,
+                            titleFont: { size: 14, weight: 'normal' },
+                            bodyFont: { size: 16, weight: 'bold' },
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)',
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value / 1000 + 'k';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false,
+                                drawBorder: false,
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                }
+            });
+
+            // 2. Traffic Source Doughnut Chart
+            const ctxTraffic = document.getElementById('trafficChart').getContext('2d');
+            new Chart(ctxTraffic, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Direct', 'Social', 'Referral'],
+                    datasets: [{
+                        data: [55, 30, 15],
+                        backgroundColor: [
+                            'rgba(255, 255, 255, 0.9)',
+                            'rgba(255, 255, 255, 0.5)',
+                            'rgba(255, 255, 255, 0.2)'
+                        ],
+                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 2,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%', // Make it thinner
+                    plugins: {
+                        legend: { display: false }, // Using custom HTML legend instead
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                            padding: 10,
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
