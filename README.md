@@ -1,4 +1,4 @@
-# 🌟 Kumpulan Template Dashboard Glassmorphism
+# 🌟 Kumpulan Template Dashboard
 
 Koleksi template dashboard UI/UX modern dengan efek kaca (glassmorphism) dan berbagai tema visual yang memukau. Dibangun menggunakan HTML, Tailwind CSS, dan JavaScript.
 
