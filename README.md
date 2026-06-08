@@ -1,80 +1,53 @@
-🔮 Glassmorphism Dashboard Collection
+# 🌟 Kumpulan Template Dashboard Glassmorphism
 
-Sebuah koleksi template antarmuka (UI) Dashboard dengan efek Glassmorphism (kaca semi-transparan) yang modern, responsif, dan estetis. Dibangun murni menggunakan HTML, Tailwind CSS, dan Chart.js tanpa framework JavaScript berat.
+Koleksi template dashboard UI/UX modern dengan efek kaca (glassmorphism) dan berbagai tema visual yang memukau. Dibangun menggunakan HTML, Tailwind CSS, dan JavaScript.
 
-✨ Fitur Utama
+[![Download ZIP](https://img.shields.io/badge/📥_Download_Template-ZIP-success?style=for-the-badge)](https://github.com/dheonz666/tamplate-dasboard/archive/refs/heads/main.zip)
 
-🎨 Efek Glassmorphism: Panel transparan dengan efek blur yang memukau.
+## ✨ Fitur Utama
+*   **10 Tema Unik:** Dari alam, cyberpunk, luar angkasa, hingga retro vaporwave.
+*   **Responsif:** Tampilan menyesuaikan dengan ukuran layar.
+*   **Glassmorphism:** Efek kaca semi-transparan yang elegan.
+*   **Mudah Dikustomisasi:** Kode yang bersih dan mudah dimodifikasi.
 
-📱 Responsif: Tampil sempurna di perangkat desktop, tablet, maupun mobile.
+---
 
-⚡ Ringan & Cepat: Menggunakan Tailwind CSS via CDN, langsung jalan di browser tanpa proses build (npm install).
+## 🎨 Pratinjau Tema (Showcase)
 
-📊 Visualisasi Data: Terintegrasi dengan Chart.js untuk grafik yang interaktif.
+### 1. Dark Glass Dashboard
+[![Dark Glass Dashboard](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/dark_glass_dashboard.png)](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/dark_glass_dashboard.png)
 
-🎭 Multi-Tema: Tersedia berbagai macam tema mulai dari minimalis, alam, hingga sci-fi.
+### 2. Dashboard Laravel
+[![Dashboard Laravel](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/dashboard_laravel.png)](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/dashboard_laravel.png)
 
-🖼️ Pratinjau Dashboard (Showcase)
+### 3. Deep Ocean Dashboard
+[![Deep Ocean Dashboard](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/deep_ocean_dashboard.png)](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/deep_ocean_dashboard.png)
 
-Catatan untuk Pemilik Repo: Silakan ganti URL gambar di bawah ini dengan screenshot asli dari UI Anda (misalnya upload screenshot ke folder /assets/img/ lalu ubah URL-nya).
+### 4. Glassmorphism Dashboard
+[![Glassmorphism Dashboard](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/glassmorphism_dashboard.png)](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/glassmorphism_dashboard.png)
 
-🚀 1. Space Command Center (Sci-Fi)
+### 5. Light Frosted Dashboard
+[![Light Frosted Dashboard](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/light_frosted_dashboard.png)](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/light_frosted_dashboard.png)
 
-Tema antariksa futuristik dengan grafik radar dan floating dock.
+### 6. Magma Esports Dashboard
+[![Magma Esports Dashboard](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/magma_esports_dashboard.png)](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/magma_esports_dashboard.png)
 
+### 7. Monochrome Minimalist
+[![Monochrome Minimalist](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/monochrome_minimalist.png)](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/monochrome_minimalist.png)
 
-🌿 2. Nature Eco Dashboard
+### 8. Nature Eco Dashboard
+[![Nature Eco Dashboard](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/nature_eco_dashboard.png)](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/nature_eco_dashboard.png)
 
-Tema hijau segar yang menenangkan, cocok untuk aplikasi lingkungan atau energi.
+### 9. Space Command Dashboard
+[![Space Command Dashboard](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/space_command_dashboard.png)](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/space_command_dashboard.png)
 
+### 10. Vaporwave Retro Dashboard
+[![Vaporwave Retro Dashboard](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/vaporwave_retro_dashboard.png)](https://raw.githubusercontent.com/dheonz666/tamplate-dasboard/refs/heads/main/ss/vaporwave_retro_dashboard.png)
 
-🌊 3. Deep Ocean Analytics
+---
 
-Sudut panel sangat membulat (bubbly) menyerupai gelembung air di laut dalam.
+## 🚀 Cara Penggunaan
 
-
-🏢 4. Monochrome Minimalist
-
-Tema elegan, kaku, dan monokromatik bergaya korporat/arsitektur minimalis.
-
-
-🕹️ 5. Vaporwave Retro (198X)
-
-Nostalgia era 80-an dengan font piksel, warna neon fuchsia, dan tampilan terminal klasik.
-
-
-🔥 6. Magma Esports HUD
-
-Tampilan antarmuka agresif dengan panel miring (skewed) dan aksen merah menyala khas kompetisi gaming.
-
-
-🚀 Cara Penggunaan
-
-Sangat mudah! Tidak perlu Node.js, Webpack, atau instalasi dependencies yang rumit.
-
-Clone repositori ini:
-
-git clone https://github.com/username-anda/nama-repo-anda.git
-
-
-Buka folder proyek.
-
-Buka file HTML (misalnya ocean_dashboard.html atau nature_dashboard.html) langsung menggunakan browser favorit Anda (Chrome, Firefox, Safari).
-
-Atau, gunakan ekstensi seperti Live Server di VS Code untuk pengalaman development yang lebih baik.
-
-🛠️ Teknologi yang Digunakan
-
-HTML5 - Struktur halaman.
-
-Tailwind CSS (CDN) - Styling dan utility classes.
-
-Chart.js - Pembuatan grafik data.
-
-Phosphor Icons - Ikon antarmuka yang bersih dan modern.
-
-Google Fonts - Tipografi.
-
-🤝 Berkontribusi
-
-Kontribusi, masalah (issues), dan permintaan fitur (pull requests) sangat dipersilakan! Jangan ragu untuk memeriksa halaman issues.
+1. **Clone Repositori:**
+```bash
+   git clone https://github.com/dheonz666/tamplate-dasboard.git
